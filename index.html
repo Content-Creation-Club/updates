@@ -6,114 +6,203 @@
 <title>LineageOS Updates for dash — Redmi Turbo 5 Max</title>
 <style>
   :root {
-    --bg: #fafafa;
-    --surface: #eeeeee;
-    --surface-high: #e4e4e4;
-    --primary: #1b1b1b;
+    --background: #f8f9fa;
+    --on-background: #191c1e;
+    --surface: #ffffff;
+    --surface-container: #f0f2f4;
+    --surface-container-high: #e5e8ea;
+    --primary: #191c1e;
     --on-primary: #ffffff;
-    --text: #1b1b1b;
-    --text-sub: #474747;
-    --outline: #c7c7c7;
-    --chip-bg: #e0e0e0;
-    --code-bg: #e4e4e4;
+    --secondary-container: #e1e3e6;
+    --on-secondary-container: #44474a;
+    --on-surface: #191c1e;
+    --on-surface-variant: #5b5f63;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #131313;
-      --surface: #1f1f1f;
-      --surface-high: #2a2a2a;
-      --primary: #e3e3e3;
-      --on-primary: #1b1b1b;
-      --text: #e3e3e3;
-      --text-sub: #c6c6c6;
-      --outline: #474747;
-      --chip-bg: #303030;
-      --code-bg: #2a2a2a;
+      --background: #0f1418;
+      --on-background: #dfe2e8;
+      --surface: #171b20;
+      --surface-container: #1b2026;
+      --surface-container-high: #262b32;
+      --primary: #9ccafa;
+      --on-primary: #003352;
+      --secondary-container: #3f4750;
+      --on-secondary-container: #dfe3eb;
+      --on-surface: #dfe2e8;
+      --on-surface-variant: #c2c7cf;
     }
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Google Sans", Roboto, "Noto Sans", system-ui, sans-serif;
+    background: var(--background);
+    color: var(--on-background);
+    font-family: Roboto, "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 32px 16px;
+    display: flex;
+    justify-content: center;
     line-height: 1.5;
   }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 64px; }
-  header { padding: 24px 0 8px; }
-  header h1 { font-size: 1.75rem; font-weight: 500; margin: 0; }
-  header p { color: var(--text-sub); margin: 6px 0 0; }
+  .container { width: 100%; max-width: 680px; }
 
-  .card {
-    background: var(--surface);
-    border-radius: 28px;
-    padding: 24px;
-    margin-top: 24px;
-  }
-  .card-title {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
+  .page-header { margin-bottom: 28px; }
+  .page-title {
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: -0.5px;
     margin-bottom: 4px;
   }
-  .card-title h2 { font-size: 1.25rem; font-weight: 500; margin: 0; }
-  .chip {
-    background: var(--chip-bg);
-    color: var(--text);
-    border-radius: 8px;
-    padding: 3px 10px;
-    font-size: 0.8rem;
+  .page-subtitle { font-size: 0.95rem; color: var(--on-surface-variant); }
+
+  .section-label {
+    font-size: 1.15rem;
     font-weight: 500;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
+    margin-bottom: 12px;
   }
-  dl.meta { margin: 16px 0 0; }
-  dl.meta div { display: flex; flex-direction: column; padding: 8px 0; border-top: 1px solid var(--outline); }
-  dl.meta div:first-child { border-top: none; }
-  dt { color: var(--text-sub); font-size: 0.8rem; }
-  dd { margin: 2px 0 0; font-size: 0.95rem; word-break: break-all; }
-  dd.mono {
-    font-family: ui-monospace, "Roboto Mono", monospace;
-    font-size: 0.82rem;
-    background: var(--code-bg);
+
+  .latest-card {
+    background: var(--surface-container);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .version-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .version-title { font-size: 1.35rem; font-weight: 600; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
     border-radius: 8px;
-    padding: 8px 10px;
-    margin-top: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: var(--secondary-container);
+    color: var(--on-secondary-container);
   }
-  .btn {
+  .meta-text {
+    font-size: 0.875rem;
+    color: var(--on-surface-variant);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .meta-dot { opacity: 0.5; }
+
+  .btn-primary {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-top: 20px;
     background: var(--primary);
     color: var(--on-primary);
-    border: none;
-    border-radius: 999px;
-    padding: 12px 28px;
-    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
     font-weight: 500;
     text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn-primary:hover { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
+
+  .btn-tonal {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--secondary-container);
+    color: var(--on-secondary-container);
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
     cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: inherit;
+    line-height: 1.5;
+    white-space: nowrap;
   }
-  .state {
+  .btn-tonal:hover { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); }
+
+  .card-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+  .history-list { display: flex; flex-direction: column; gap: 8px; }
+  .history-item {
     background: var(--surface);
-    border-radius: 28px;
-    padding: 40px 24px;
-    margin-top: 24px;
-    text-align: center;
-    color: var(--text-sub);
+    border-radius: 16px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1px solid var(--surface-container);
   }
-  .prev .card-title h2 { font-size: 1.05rem; }
-  footer { margin-top: 40px; color: var(--text-sub); font-size: 0.8rem; text-align: center; }
+  .history-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .history-filename {
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .history-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .icon-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: var(--surface-container);
+    color: var(--on-surface);
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .icon-action-btn:hover { background: var(--secondary-container); }
+
+  svg { width: 18px; height: 18px; fill: currentColor; }
+
+  .state {
+    background: var(--surface-container);
+    border-radius: 24px;
+    padding: 40px 24px;
+    margin-bottom: 36px;
+    text-align: center;
+    color: var(--on-surface-variant);
+  }
+  footer {
+    margin-top: 40px;
+    color: var(--on-surface-variant);
+    font-size: 0.8rem;
+    text-align: center;
+  }
   footer a { color: var(--primary); }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>dash updates when?</h1>
-    <p><del>idk either.</del></p>
+<div class="container">
+  <header class="page-header">
+    <h1 class="page-title">dash updates when?</h1>
+    <p class="page-subtitle"><del>idk either.</del></p>
   </header>
 
   <main id="content">
@@ -126,6 +215,11 @@
 <script>
 (function () {
   var content = document.getElementById("content");
+
+  var DOWNLOAD_SVG = '<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>';
+  var COPY_SVG = '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
+  var FINGERPRINT_SVG = '<svg viewBox="0 0 24 24"><path d="M20.5 10L21 8h-4l1-4h-2l-1 4h-4l1-4h-2L9 8H5l-.5 2h4l-1 4h-4L3 16h4l-1 4h2l1-4h4l-1 4h2l1-4h4l.5-2h-4l1-4h4zm-7 4h-4l1-4h4l-1 4z"/></svg>';
+  var CHECK_SVG = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
 
   function el(tag, cls, text) {
     var e = document.createElement(tag);
@@ -146,37 +240,96 @@
     return (bytes / (1024 * 1024)).toFixed(1) + " MiB";
   }
 
-  function metaRow(dl, label, value, mono) {
-    var row = el("div");
-    row.appendChild(el("dt", null, label));
-    row.appendChild(el("dd", mono ? "mono" : null, value));
-    dl.appendChild(row);
+  function metaText(date, size) {
+    var meta = el("div", "meta-text");
+    meta.appendChild(el("span", null, date));
+    meta.appendChild(el("span", "meta-dot", "·"));
+    meta.appendChild(el("span", null, size));
+    return meta;
   }
 
-  function buildCard(build, isLatest) {
+  function buildLatestCard(build) {
     var file = (build.files && build.files[0]) || {};
-    var card = el("section", "card" + (isLatest ? "" : " prev"));
+    var card = el("div", "latest-card");
 
-    var title = el("div", "card-title");
-    title.appendChild(el("h2", null, isLatest ? "LineageOS " + build.version : "Previous build"));
-    if (build.type) title.appendChild(el("span", "chip", build.type));
-    card.appendChild(title);
+    var top = el("div", "card-top-row");
+    var info = el("div");
+    var group = el("div", "version-group");
+    group.appendChild(el("span", "version-title", "LineageOS " + build.version));
+    if (build.type) group.appendChild(el("span", "badge", build.type));
+    info.appendChild(group);
+    var bits = [];
+    if (build.datetime) bits.push(formatDate(build.datetime));
+    if (typeof file.size === "number") bits.push(formatSize(file.size));
+    if (bits.length === 2) info.appendChild(metaText(bits[0], bits[1]));
+    else if (bits.length === 1) info.appendChild(el("div", "meta-text", bits[0]));
+    top.appendChild(info);
 
-    var dl = el("dl", "meta");
-    if (build.type && !isLatest) metaRow(dl, "Release type", build.type);
-    if (build.datetime) metaRow(dl, "Build date", formatDate(build.datetime));
-    if (file.filename) metaRow(dl, "Filename", file.filename);
-    if (typeof file.size === "number") metaRow(dl, "File size", formatSize(file.size));
-    if (file.sha256) metaRow(dl, "SHA256", file.sha256, true);
-    card.appendChild(dl);
-
+    var actions = el("div", "card-actions");
+    if (file.sha256) {
+      var hashBtn = el("button", "btn-tonal");
+      hashBtn.title = "Copy SHA256";
+      hashBtn.innerHTML = FINGERPRINT_SVG;
+      hashBtn.appendChild(document.createTextNode("SHA256"));
+      hashBtn.addEventListener("click", function () {
+        if (navigator.clipboard) navigator.clipboard.writeText(file.sha256);
+        hashBtn.innerHTML = CHECK_SVG;
+        setTimeout(function () {
+          hashBtn.innerHTML = FINGERPRINT_SVG;
+          hashBtn.appendChild(document.createTextNode("SHA256"));
+        }, 1500);
+      });
+      actions.appendChild(hashBtn);
+    }
     if (file.url) {
-      var btn = el("a", "btn", "Download");
+      var btn = el("a", "btn-primary");
       btn.href = file.url;
       btn.rel = "noopener";
-      card.appendChild(btn);
+      btn.innerHTML = DOWNLOAD_SVG;
+      btn.appendChild(document.createTextNode("Download"));
+      actions.appendChild(btn);
     }
+    top.appendChild(actions);
+    card.appendChild(top);
+
     return card;
+  }
+
+  function buildHistoryItem(build) {
+    var file = (build.files && build.files[0]) || {};
+    var item = el("div", "history-item");
+
+    var info = el("div", "history-info");
+    if (file.filename) info.appendChild(el("span", "history-filename", file.filename));
+    var bits = [];
+    if (build.datetime) bits.push(formatDate(build.datetime));
+    if (typeof file.size === "number") bits.push(formatSize(file.size));
+    if (bits.length === 2) info.appendChild(metaText(bits[0], bits[1]));
+    else if (bits.length === 1) info.appendChild(el("div", "meta-text", bits[0]));
+    item.appendChild(info);
+
+    var actions = el("div", "history-actions");
+    if (file.sha256) {
+      var hashBtn = el("button", "icon-action-btn");
+      hashBtn.title = "Copy SHA256";
+      hashBtn.innerHTML = FINGERPRINT_SVG;
+      hashBtn.addEventListener("click", function () {
+        if (navigator.clipboard) navigator.clipboard.writeText(file.sha256);
+        hashBtn.innerHTML = CHECK_SVG;
+        setTimeout(function () { hashBtn.innerHTML = FINGERPRINT_SVG; }, 1500);
+      });
+      actions.appendChild(hashBtn);
+    }
+    if (file.url) {
+      var btn = el("a", "icon-action-btn");
+      btn.href = file.url;
+      btn.rel = "noopener";
+      btn.title = "Download";
+      btn.innerHTML = DOWNLOAD_SVG;
+      actions.appendChild(btn);
+    }
+    item.appendChild(actions);
+    return item;
   }
 
   function showState(msg) {
@@ -199,9 +352,24 @@
         showState("No builds are currently available.");
         return;
       }
+
       content.textContent = "";
-      content.appendChild(buildCard(builds[0], true));
-      if (builds.length > 1) content.appendChild(buildCard(builds[1], false));
+
+      var latestSection = el("section");
+      latestSection.appendChild(el("h2", "section-label", "Latest build"));
+      latestSection.appendChild(buildLatestCard(builds[0]));
+      content.appendChild(latestSection);
+
+      if (builds.length > 1) {
+        var historySection = el("section");
+        historySection.appendChild(el("h2", "section-label", "Previous builds"));
+        var list = el("div", "history-list");
+        builds.slice(1).forEach(function (b) {
+          list.appendChild(buildHistoryItem(b));
+        });
+        historySection.appendChild(list);
+        content.appendChild(historySection);
+      }
     })
     .catch(function () {
       showState("Build metadata is currently unavailable. Please check back later.");
