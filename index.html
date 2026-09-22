@@ -138,7 +138,26 @@
 
   .card-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
+  @media (max-width: 600px) {
+    .card-top-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .card-actions { justify-content: flex-end; }
+    .btn-tonal { padding: 10px; border-radius: 999px; }
+    .btn-tonal .btn-label { display: none; }
+  }
+
   .history-list { display: flex; flex-direction: column; gap: 8px; }
+  .history-group-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 20px 0 8px;
+  }
+  .history-group-title:first-of-type { margin-top: 0; }
   .history-item {
     background: var(--surface);
     border-radius: 16px;
@@ -155,7 +174,7 @@
     gap: 4px;
     min-width: 0;
   }
-  .history-filename {
+  .history-title {
     font-size: 0.9rem;
     font-weight: 500;
     white-space: nowrap;
@@ -228,12 +247,6 @@
     return e;
   }
 
-  function formatDate(epochSec) {
-    return new Date(epochSec * 1000).toLocaleDateString("en-US", {
-      year: "numeric", month: "long", day: "numeric"
-    });
-  }
-
   function formatSize(bytes) {
     var gib = bytes / (1024 * 1024 * 1024);
     if (gib >= 1) return gib.toFixed(2) + " GiB";
@@ -259,7 +272,8 @@
     if (build.type) group.appendChild(el("span", "badge", build.type));
     info.appendChild(group);
     var bits = [];
-    if (build.datetime) bits.push(formatDate(build.datetime));
+    var tag = buildDateTag(build, file);
+    if (tag) bits.push(tag);
     if (typeof file.size === "number") bits.push(formatSize(file.size));
     if (bits.length === 2) info.appendChild(metaText(bits[0], bits[1]));
     else if (bits.length === 1) info.appendChild(el("div", "meta-text", bits[0]));
@@ -269,15 +283,15 @@
     if (file.sha256) {
       var hashBtn = el("button", "btn-tonal");
       hashBtn.title = "Copy SHA256";
-      hashBtn.innerHTML = FINGERPRINT_SVG;
-      hashBtn.appendChild(document.createTextNode("SHA256"));
+      var setHashIcon = function (icon) {
+        hashBtn.innerHTML = icon;
+        hashBtn.appendChild(el("span", "btn-label", "SHA256"));
+      };
+      setHashIcon(FINGERPRINT_SVG);
       hashBtn.addEventListener("click", function () {
         if (navigator.clipboard) navigator.clipboard.writeText(file.sha256);
         hashBtn.innerHTML = CHECK_SVG;
-        setTimeout(function () {
-          hashBtn.innerHTML = FINGERPRINT_SVG;
-          hashBtn.appendChild(document.createTextNode("SHA256"));
-        }, 1500);
+        setTimeout(function () { setHashIcon(FINGERPRINT_SVG); }, 1500);
       });
       actions.appendChild(hashBtn);
     }
@@ -295,17 +309,28 @@
     return card;
   }
 
+  function buildDateTag(build, file) {
+    var m = file.filename && file.filename.match(/\d{8}/);
+    if (m) return m[0];
+    if (build.datetime) {
+      var d = new Date(build.datetime * 1000);
+      var mm = String(d.getMonth() + 1).padStart(2, "0");
+      var dd = String(d.getDate()).padStart(2, "0");
+      return d.getFullYear() + mm + dd;
+    }
+    return "";
+  }
+
   function buildHistoryItem(build) {
     var file = (build.files && build.files[0]) || {};
     var item = el("div", "history-item");
 
     var info = el("div", "history-info");
-    if (file.filename) info.appendChild(el("span", "history-filename", file.filename));
     var bits = [];
-    if (build.datetime) bits.push(formatDate(build.datetime));
+    var tag = buildDateTag(build, file);
+    if (tag) bits.push(tag);
     if (typeof file.size === "number") bits.push(formatSize(file.size));
-    if (bits.length === 2) info.appendChild(metaText(bits[0], bits[1]));
-    else if (bits.length === 1) info.appendChild(el("div", "meta-text", bits[0]));
+    if (bits.length) info.appendChild(el("span", "history-title", bits.join(" · ")));
     item.appendChild(info);
 
     var actions = el("div", "history-actions");
@@ -363,11 +388,27 @@
       if (builds.length > 1) {
         var historySection = el("section");
         historySection.appendChild(el("h2", "section-label", "Previous builds"));
-        var list = el("div", "history-list");
+        var groups = [];
+        var byKey = {};
         builds.slice(1).forEach(function (b) {
-          list.appendChild(buildHistoryItem(b));
+          var key = b.version + "|" + (b.type || "");
+          if (!byKey[key]) {
+            byKey[key] = { version: b.version, type: b.type, items: [] };
+            groups.push(byKey[key]);
+          }
+          byKey[key].items.push(b);
         });
-        historySection.appendChild(list);
+        groups.forEach(function (g) {
+          var gtitle = el("div", "history-group-title");
+          gtitle.appendChild(el("span", null, "LineageOS " + g.version));
+          if (g.type) gtitle.appendChild(el("span", "badge", g.type));
+          historySection.appendChild(gtitle);
+          var list = el("div", "history-list");
+          g.items.forEach(function (b) {
+            list.appendChild(buildHistoryItem(b));
+          });
+          historySection.appendChild(list);
+        });
         content.appendChild(historySection);
       }
     })
