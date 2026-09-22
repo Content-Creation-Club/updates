@@ -43,7 +43,7 @@
     justify-content: center;
     line-height: 1.5;
   }
-  .container { width: 100%; max-width: 680px; }
+  .container { width: 100%; max-width: 900px; }
 
   .page-header { margin-bottom: 28px; }
   .page-title {
@@ -63,7 +63,7 @@
   .latest-card {
     background: var(--surface-container);
     border-radius: 24px;
-    padding: 24px;
+    padding: 32px;
     margin-bottom: 36px;
     display: flex;
     flex-direction: column;
@@ -81,7 +81,7 @@
     gap: 10px;
     margin-bottom: 6px;
   }
-  .version-title { font-size: 1.35rem; font-weight: 600; }
+  .version-title { font-size: 1.6rem; font-weight: 600; }
   .badge {
     display: inline-flex;
     align-items: center;
@@ -99,9 +99,8 @@
     color: var(--on-surface-variant);
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
   }
-  .meta-dot { opacity: 0.5; }
 
   .btn-primary {
     display: inline-flex;
@@ -137,18 +136,13 @@
   .btn-tonal:hover { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); }
 
   .card-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .btn-icon { display: inline-flex; }
 
-  @media (max-width: 600px) {
-    .card-top-row {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    .card-actions { justify-content: flex-end; }
-    .btn-tonal { padding: 10px; border-radius: 999px; }
-    .btn-tonal .btn-label { display: none; }
+  .history-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
-
-  .history-list { display: flex; flex-direction: column; gap: 8px; }
   .history-group-title {
     display: flex;
     align-items: center;
@@ -177,9 +171,11 @@
   .history-title {
     font-size: 0.9rem;
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
   .history-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   .icon-action-btn {
@@ -197,6 +193,19 @@
     flex-shrink: 0;
   }
   .icon-action-btn:hover { background: var(--secondary-container); }
+
+  @media (max-width: 560px) {
+    .latest-card { padding: 24px; }
+    .version-title { font-size: 1.35rem; }
+    .btn-tonal { padding: 10px; border-radius: 999px; }
+    .btn-tonal .btn-label { display: none; }
+    .card-top-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .card-actions { justify-content: flex-end; }
+    .history-list { grid-template-columns: 1fr; }
+  }
 
   svg { width: 18px; height: 18px; fill: currentColor; }
 
@@ -253,11 +262,10 @@
     return (bytes / (1024 * 1024)).toFixed(1) + " MiB";
   }
 
-  function metaText(date, size) {
+  function metaText(a, b) {
     var meta = el("div", "meta-text");
-    meta.appendChild(el("span", null, date));
-    meta.appendChild(el("span", "meta-dot", "·"));
-    meta.appendChild(el("span", null, size));
+    meta.appendChild(el("span", null, a));
+    meta.appendChild(el("span", null, b));
     return meta;
   }
 
@@ -283,15 +291,14 @@
     if (file.sha256) {
       var hashBtn = el("button", "btn-tonal");
       hashBtn.title = "Copy SHA256";
-      var setHashIcon = function (icon) {
-        hashBtn.innerHTML = icon;
-        hashBtn.appendChild(el("span", "btn-label", "SHA256"));
-      };
-      setHashIcon(FINGERPRINT_SVG);
+      var hashIcon = el("span", "btn-icon");
+      hashIcon.innerHTML = FINGERPRINT_SVG;
+      hashBtn.appendChild(hashIcon);
+      hashBtn.appendChild(el("span", "btn-label", "SHA256"));
       hashBtn.addEventListener("click", function () {
         if (navigator.clipboard) navigator.clipboard.writeText(file.sha256);
-        hashBtn.innerHTML = CHECK_SVG;
-        setTimeout(function () { setHashIcon(FINGERPRINT_SVG); }, 1500);
+        hashIcon.innerHTML = CHECK_SVG;
+        setTimeout(function () { hashIcon.innerHTML = FINGERPRINT_SVG; }, 1500);
       });
       actions.appendChild(hashBtn);
     }
@@ -330,7 +337,11 @@
     var tag = buildDateTag(build, file);
     if (tag) bits.push(tag);
     if (typeof file.size === "number") bits.push(formatSize(file.size));
-    if (bits.length) info.appendChild(el("span", "history-title", bits.join(" · ")));
+    if (bits.length) {
+      var title = el("span", "history-title");
+      bits.forEach(function (bit) { title.appendChild(el("span", null, bit)); });
+      info.appendChild(title);
+    }
     item.appendChild(info);
 
     var actions = el("div", "history-actions");
@@ -391,7 +402,7 @@
         var groups = [];
         var byKey = {};
         builds.slice(1).forEach(function (b) {
-          var key = b.version + "|" + (b.type || "");
+          var key = b.version;
           if (!byKey[key]) {
             byKey[key] = { version: b.version, type: b.type, items: [] };
             groups.push(byKey[key]);
@@ -399,10 +410,12 @@
           byKey[key].items.push(b);
         });
         groups.forEach(function (g) {
-          var gtitle = el("div", "history-group-title");
-          gtitle.appendChild(el("span", null, "LineageOS " + g.version));
-          if (g.type) gtitle.appendChild(el("span", "badge", g.type));
-          historySection.appendChild(gtitle);
+          if (groups.length > 1) {
+            var gtitle = el("div", "history-group-title");
+            gtitle.appendChild(el("span", null, "LineageOS " + g.version));
+            if (g.type) gtitle.appendChild(el("span", "badge", g.type));
+            historySection.appendChild(gtitle);
+          }
           var list = el("div", "history-list");
           g.items.forEach(function (b) {
             list.appendChild(buildHistoryItem(b));
