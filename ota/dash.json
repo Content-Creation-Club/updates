@@ -1,5 +1,18 @@
 [
   {
+    "datetime": 1791718495,
+    "files": [
+      {
+        "filename": "lineage-24.0-20261012-RAWHIDE-dash-signed.zip",
+        "sha256": "b30fc7e941452ce5163de37a0d55b168c2e7a023ac3c8f53098f8ad41a72d529",
+        "size": 1831578618,
+        "url": "https://builds.sandai.me/lineage-24.0-20261012-RAWHIDE-dash-signed.zip"
+      }
+    ],
+    "type": "RAWHIDE",
+    "version": "24.0"
+  },
+  {
     "datetime": 1789964237,
     "files": [
       {
@@ -7,19 +20,6 @@
         "sha256": "e4996ef0e46027c4d8cee163bef695360c72b401e2d411522c88176bc91db561",
         "size": 1697365853,
         "url": "https://builds.sandai.me/lineage-23.2-20260920-RAWHIDE-dash-signed.zip"
-      }
-    ],
-    "type": "RAWHIDE",
-    "version": "23.2"
-  },
-  {
-    "datetime": 1789153706,
-    "files": [
-      {
-        "filename": "lineage-23.2-20260911-RAWHIDE-dash-signed.zip",
-        "sha256": "618b000a96d7d23a04398e74e3a51c6acd75aa1ab36ca188e66054571f77701d",
-        "size": 1562582853,
-        "url": "https://builds.sandai.me/lineage-23.2-20260911-RAWHIDE-dash-signed.zip"
       }
     ],
     "type": "RAWHIDE",
