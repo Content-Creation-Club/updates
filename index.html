@@ -410,7 +410,7 @@
           byKey[key].items.push(b);
         });
         groups.forEach(function (g) {
-          if (groups.length > 1) {
+          if (groups.length > 1 || g.version !== builds[0].version) {
             var gtitle = el("div", "history-group-title");
             gtitle.appendChild(el("span", null, "LineageOS " + g.version));
             if (g.type) gtitle.appendChild(el("span", "badge", g.type));
